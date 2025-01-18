@@ -7,16 +7,19 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Input Section -->
   <div id="input-section">
     <textarea id="word-list" placeholder="Enter your list of words, separated by commas"></textarea>
     <button id="start-btn">Start Test</button>
   </div>
 
+  <!-- TTS Voice Selection -->
   <div id="tts-section">
     <label for="voice-select">Choose Voice:</label>
     <select id="voice-select"></select>
   </div>
 
+  <!-- Test Section -->
   <div id="test-section" class="hidden">
     <p id="word-prompt"></p>
     <input id="user-input" type="text" placeholder="Type your answer here">
@@ -24,6 +27,7 @@
     <button id="repeat-btn" disabled>Repeat</button>
   </div>
 
+  <!-- Result Section -->
   <div id="result-section" class="hidden">
     <h2>Results</h2>
     <p id="score"></p>
