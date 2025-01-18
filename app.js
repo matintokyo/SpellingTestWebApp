@@ -10,12 +10,14 @@ const scoreDisplay = document.getElementById('score');
 const wordResults = document.getElementById('word-results');
 const restartBtn = document.getElementById('restart-btn');
 const inputSection = document.getElementById('input-section');
+const voiceSelect = document.getElementById('voice-select');
 
 let words = [];
 let testWords = [];
 let currentWordIndex = 0;
 let userAnswers = [];
 let score = 0;
+let selectedVoice = null;
 
 // Predefined list of 100 words
 const predefinedWords = [
@@ -33,10 +35,29 @@ const predefinedWords = [
   'jungle', 'rainforest', 'tundra', 'steppe', 'fjord', 'estuary', 'grove', 'orchard'
 ];
 
-// Prepopulate the word list when the page loads
+// Prepopulate the word list and load voices
 document.addEventListener('DOMContentLoaded', () => {
   wordListInput.value = predefinedWords.join(', ');
+  populateVoiceList();
 });
+
+// Populate TTS voices in the dropdown
+function populateVoiceList() {
+  const synth = window.speechSynthesis;
+  const voices = synth.getVoices();
+  voiceSelect.innerHTML = voices
+    .map((voice, index) => `<option value="${index}">${voice.name} (${voice.lang})</option>`)
+    .join('');
+  selectedVoice = voices[0] || null; // Default to the first voice
+
+  // Update the voice when the user selects a new one
+  voiceSelect.addEventListener('change', () => {
+    const selectedIndex = parseInt(voiceSelect.value, 10);
+    selectedVoice = voices[selectedIndex];
+  });
+
+  synth.onvoiceschanged = populateVoiceList; // Refresh voices if needed
+}
 
 // Start the test
 startBtn.addEventListener('click', () => {
@@ -62,6 +83,7 @@ function startTest() {
   repeatBtn.disabled = true;
   userInput.value = '';
   wordPrompt.textContent = 'Press "Next" to hear the first word!';
+  userInput.focus(); // Focus the input box initially
 }
 
 // Next word in the test
@@ -78,6 +100,7 @@ nextBtn.addEventListener('click', () => {
     wordPrompt.textContent = `Word ${currentWordIndex + 1} of ${testWords.length}`;
     repeatBtn.disabled = false;
     currentWordIndex++;
+    userInput.focus(); // Focus the input box automatically
   } else {
     endTest();
   }
@@ -132,5 +155,6 @@ function getRandomWords(wordArray, count) {
 function speakWord(word) {
   const synth = window.speechSynthesis;
   const utterance = new SpeechSynthesisUtterance(word);
+  if (selectedVoice) utterance.voice = selectedVoice;
   synth.speak(utterance);
 }
