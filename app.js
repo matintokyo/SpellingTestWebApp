@@ -35,7 +35,7 @@ const predefinedWords = [
 
 // Prepopulate the word list when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-  wordListInput.value = predefinedWords.join(', '); // Populate the textarea with predefined words
+  wordListInput.value = predefinedWords.join(', ');
 });
 
 // Start the test
@@ -91,46 +91,4 @@ repeatBtn.addEventListener('click', () => {
 
 // End the test and show results
 function endTest() {
-  const userAnswer = userInput.value.trim();
-  userAnswers.push(userAnswer);
-  testSection.classList.add('hidden');
-  resultSection.classList.remove('hidden');
-  displayResults();
-}
-
-// Display results
-function displayResults() {
-  score = 0;
-  wordResults.innerHTML = '';
-  testWords.forEach((word, index) => {
-    const userAnswer = userAnswers[index] || 'empty';
-    const isCorrect = word.toLowerCase() === userAnswer.toLowerCase();
-    if (isCorrect) score++;
-
-    const listItem = document.createElement('li');
-    listItem.textContent = `${index + 1}. ${word} - ${isCorrect ? 'Correct' : `Wrong (You wrote: "${userAnswer}")`}`;
-    listItem.style.color = isCorrect ? 'green' : 'red';
-    wordResults.appendChild(listItem);
-  });
-  scoreDisplay.textContent = `You scored ${score} out of ${testWords.length}.`;
-}
-
-// Restart the test
-restartBtn.addEventListener('click', () => {
-  startTest();
-});
-
-// Function to get random words
-function getRandomWords(wordArray, count) {
-  return wordArray
-    .slice() // Make a copy to avoid modifying the original array
-    .sort(() => Math.random() - 0.5) // Shuffle the array
-    .slice(0, count); // Select the first `count` words
-}
-
-// Function to read a word using TTS
-function speakWord(word) {
-  const synth = window.speechSynthesis;
-  const utterance = new SpeechSynthesisUtterance(word);
-  synth.speak(utterance);
-}
+  const
