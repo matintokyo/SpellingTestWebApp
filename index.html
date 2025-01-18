@@ -3,33 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spelling Practice App</title>
+  <title>Spelling Practice</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Spelling Practice</h1>
-    <div id="input-section">
-      <textarea id="word-list" placeholder="Enter your list of words, separated by commas"></textarea>
-      <div class="controls">
-        <button id="start-btn">Start Test</button>
-      </div>
-    </div>
-    <div id="test-section" class="hidden">
-      <p id="word-prompt">Press "Next" to hear the first word!</p>
-      <input type="text" id="user-input" placeholder="Type the word here" autocomplete="off">
-      <div class="test-controls">
-        <button id="repeat-btn" disabled>Repeat</button>
-        <button id="next-btn">Next</button>
-      </div>
-    </div>
-    <div id="result-section" class="hidden">
-      <h2>Results</h2>
-      <p id="score"></p>
-      <ul id="word-results"></ul>
-      <button id="restart-btn">Take Another Test</button>
-    </div>
+  <div id="input-section">
+    <textarea id="word-list" placeholder="Enter your list of words, separated by commas"></textarea>
+    <button id="start-btn">Start Test</button>
   </div>
-  <script src="app.js"></script>
+
+  <div id="test-section" class="hidden">
+    <p id="word-prompt"></p>
+    <input id="user-input" type="text" placeholder="Type your answer here">
+    <button id="next-btn">Next</button>
+    <button id="repeat-btn" disabled>Repeat</button>
+  </div>
+
+  <div id="result-section" class="hidden">
+    <h2>Results</h2>
+    <p id="score"></p>
+    <ul id="word-results"></ul>
+    <button id="restart-btn">Take Another Test</button>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
