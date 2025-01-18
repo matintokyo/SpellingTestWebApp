@@ -1,5 +1,4 @@
 const wordListInput = document.getElementById('word-list');
-const generateBtn = document.getElementById('generate-btn');
 const startBtn = document.getElementById('start-btn');
 const testSection = document.getElementById('test-section');
 const wordPrompt = document.getElementById('word-prompt');
@@ -18,7 +17,7 @@ let currentWordIndex = 0;
 let userAnswers = [];
 let score = 0;
 
-// Predefined list of words to generate random words
+// Predefined list of 100 words
 const predefinedWords = [
   'apple', 'banana', 'cherry', 'date', 'elephant', 'falcon', 'grape', 'hippopotamus',
   'igloo', 'jaguar', 'kangaroo', 'lemon', 'mango', 'nectarine', 'orange', 'peach',
@@ -26,25 +25,17 @@ const predefinedWords = [
   'xylophone', 'yacht', 'zebra', 'ant', 'bee', 'cat', 'dog', 'eagle', 'frog',
   'goose', 'hawk', 'iguana', 'jellyfish', 'kiwi', 'lion', 'monkey', 'newt',
   'owl', 'penguin', 'quokka', 'rabbit', 'snake', 'tiger', 'urchin', 'vulture',
-  'whale', 'xerus', 'yak', 'zucchini'
+  'whale', 'xerus', 'yak', 'zucchini', 'cloud', 'rainbow', 'forest', 'mountain',
+  'river', 'ocean', 'desert', 'island', 'prairie', 'plateau', 'valley', 'meadow',
+  'cliff', 'canyon', 'lake', 'waterfall', 'stream', 'geyser', 'volcano', 'glacier',
+  'hill', 'dune', 'reef', 'lagoon', 'beach', 'shore', 'bay', 'cave', 'delta',
+  'plain', 'peak', 'peninsula', 'archipelago', 'marsh', 'swamp', 'bog', 'savanna',
+  'jungle', 'rainforest', 'tundra', 'steppe', 'fjord', 'estuary', 'grove', 'orchard'
 ];
 
-// Function to shuffle and select random words
-function getRandomWords(wordArray, count) {
-  return wordArray.sort(() => Math.random() - 0.5).slice(0, count);
-}
-
-// Function to read a word using TTS
-function speakWord(word) {
-  const synth = window.speechSynthesis;
-  const utterance = new SpeechSynthesisUtterance(word);
-  synth.speak(utterance);
-}
-
-// Generate random words and fill the input
-generateBtn.addEventListener('click', () => {
-  const randomWords = getRandomWords(predefinedWords, 50);
-  wordListInput.value = randomWords.join(', ');
+// Prepopulate the word list when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+  wordListInput.value = predefinedWords.join(', '); // Populate the textarea with predefined words
 });
 
 // Start the test
@@ -55,4 +46,9 @@ startBtn.addEventListener('click', () => {
       alert('Please enter at least 10 words.');
       return;
     }
-    words = inputWords
+    words = inputWords;
+  }
+  startTest();
+});
+
+// Other functions like `startTest`, `nextBtn` click handler, `endTest`, etc., remain unchanged
