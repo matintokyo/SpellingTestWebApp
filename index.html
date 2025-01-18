@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spelling Practice App</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Spelling Practice</h1>
+    <div id="input-section">
+      <textarea id="word-list" placeholder="Enter your list of words, separated by commas"></textarea>
+      <button id="start-btn">Start Test</button>
+    </div>
+    <div id="test-section" class="hidden">
+      <p id="word-prompt">Press "Next" to hear the first word!</p>
+      <input type="text" id="user-input" placeholder="Type the word here" autocomplete="off">
+      <button id="next-btn">Next</button>
+    </div>
+    <div id="result-section" class="hidden">
+      <h2>Results</h2>
+      <p id="score"></p>
+      <ul id="mistakes"></ul>
+      <button id="restart-btn">Restart</button>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
