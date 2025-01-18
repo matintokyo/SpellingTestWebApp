@@ -46,9 +46,91 @@ startBtn.addEventListener('click', () => {
       alert('Please enter at least 10 words.');
       return;
     }
-    words = inputWords;
+    words = inputWords; // Save words for reuse
   }
   startTest();
 });
 
-// Other functions like `startTest`, `nextBtn` click handler, `endTest`, etc., remain unchanged
+function startTest() {
+  testWords = getRandomWords(words, 10); // Get 10 random words for the test
+  inputSection.classList.add('hidden');
+  resultSection.classList.add('hidden');
+  testSection.classList.remove('hidden');
+  currentWordIndex = 0;
+  userAnswers = [];
+  score = 0;
+  repeatBtn.disabled = true;
+  userInput.value = '';
+  wordPrompt.textContent = 'Press "Next" to hear the first word!';
+}
+
+// Next word in the test
+nextBtn.addEventListener('click', () => {
+  if (currentWordIndex > 0) {
+    const userAnswer = userInput.value.trim();
+    userAnswers.push(userAnswer);
+    userInput.value = '';
+  }
+
+  if (currentWordIndex < testWords.length) {
+    const currentWord = testWords[currentWordIndex];
+    speakWord(currentWord);
+    wordPrompt.textContent = `Word ${currentWordIndex + 1} of ${testWords.length}`;
+    repeatBtn.disabled = false;
+    currentWordIndex++;
+  } else {
+    endTest();
+  }
+});
+
+// Repeat the current word
+repeatBtn.addEventListener('click', () => {
+  const currentWord = testWords[currentWordIndex - 1];
+  speakWord(currentWord);
+});
+
+// End the test and show results
+function endTest() {
+  const userAnswer = userInput.value.trim();
+  userAnswers.push(userAnswer);
+  testSection.classList.add('hidden');
+  resultSection.classList.remove('hidden');
+  displayResults();
+}
+
+// Display results
+function displayResults() {
+  score = 0;
+  wordResults.innerHTML = '';
+  testWords.forEach((word, index) => {
+    const userAnswer = userAnswers[index] || 'empty';
+    const isCorrect = word.toLowerCase() === userAnswer.toLowerCase();
+    if (isCorrect) score++;
+
+    const listItem = document.createElement('li');
+    listItem.textContent = `${index + 1}. ${word} - ${isCorrect ? 'Correct' : `Wrong (You wrote: "${userAnswer}")`}`;
+    listItem.style.color = isCorrect ? 'green' : 'red';
+    wordResults.appendChild(listItem);
+  });
+  scoreDisplay.textContent = `You scored ${score} out of ${testWords.length}.`;
+}
+
+// Restart the test
+restartBtn.addEventListener('click', () => {
+  startTest();
+});
+
+// Function to get random words
+function getRandomWords(wordArray, count) {
+  return wordArray
+    .slice() // Make a copy to avoid modifying the original array
+    .sort(() => Math.random() - 0.5) // Shuffle the array
+    .slice(0, count); // Select the first `count` words
+}
+
+// Function to read a word using TTS
+function speakWord(word) {
+  const synth = window.speechSynthesis;
+  const utterance = new SpeechSynthesisUtterance(word);
+  synth.speak(utterance);
+}
