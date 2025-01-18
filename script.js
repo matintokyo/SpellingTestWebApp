@@ -1,5 +1,6 @@
 const wordListInput = document.getElementById('word-list');
 const startBtn = document.getElementById('start-btn');
+const inputSection = document.getElementById('input-section'); // Properly defined
 const testSection = document.getElementById('test-section');
 const wordPrompt = document.getElementById('word-prompt');
 const userInput = document.getElementById('user-input');
@@ -60,14 +61,12 @@ function populateVoiceList() {
 
 // Start the test
 startBtn.addEventListener('click', () => {
-  if (words.length === 0) {
-    const inputWords = wordListInput.value.split(',').map(w => w.trim()).filter(Boolean);
-    if (inputWords.length < 10) {
-      alert('Please enter at least 10 words.');
-      return;
-    }
-    words = inputWords; // Save words for reuse
+  const inputWords = wordListInput.value.split(',').map(w => w.trim()).filter(Boolean);
+  if (inputWords.length < 10) {
+    alert('Please enter at least 10 words.');
+    return;
   }
+  words = inputWords;
   startTest();
 });
 
