@@ -4,41 +4,52 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spelling Practice</title>
+  <!-- Include Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEJ5bGg5v6S2g9MzVrD6Xjc9MkY6hgA1Xk64zUAX0jYNinE4XbAwP4p7J9fYp" crossorigin="anonymous">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
+  <div class="container py-5">
     <!-- Input Section -->
-    <div id="input-section" class="section">
-      <textarea id="word-list" placeholder="Enter your list of words, separated by commas"></textarea>
-      <button id="start-btn" class="primary-btn">Start Test</button>
+    <div id="input-section" class="section mb-4">
+      <div class="mb-3">
+        <textarea id="word-list" class="form-control" placeholder="Enter your list of words, separated by commas"></textarea>
+      </div>
+      <button id="start-btn" class="btn btn-success w-100">Start Test</button>
     </div>
 
     <!-- TTS Voice Selection -->
-    <div id="tts-section" class="section">
-      <label for="voice-select" class="label">Choose Voice:</label>
-      <select id="voice-select" class="dropdown"></select>
+    <div id="tts-section" class="section mb-4">
+      <label for="voice-select" class="form-label">Choose Voice:</label>
+      <select id="voice-select" class="form-select">
+        <!-- Dynamic options will be populated here -->
+      </select>
     </div>
 
     <!-- Test Section -->
-    <div id="test-section" class="hidden section">
-      <p id="word-prompt" class="prompt"></p>
-      <input id="user-input" type="text" placeholder="Type your answer here" class="text-input">
-      <div class="button-group">
-        <button id="next-btn" class="primary-btn">Next</button>
-        <button id="repeat-btn" class="secondary-btn" disabled>Repeat</button>
+    <div id="test-section" class="hidden section mb-4">
+      <p id="word-prompt" class="h5 text-center mb-4"></p>
+      <input id="user-input" type="text" class="form-control mb-3" placeholder="Type your answer here">
+      <div class="d-flex justify-content-between">
+        <button id="next-btn" class="btn btn-primary w-48">Next</button>
+        <button id="repeat-btn" class="btn btn-secondary w-48" disabled>Repeat</button>
       </div>
     </div>
 
     <!-- Result Section -->
-    <div id="result-section" class="hidden section">
+    <div id="result-section" class="hidden section mb-4">
       <h2>Results</h2>
-      <p id="score" class="score"></p>
-      <ul id="word-results" class="results-list"></ul>
-      <button id="restart-btn" class="primary-btn">Take Another Test</button>
+      <p id="score" class="h4 mb-4"></p>
+      <ul id="word-results" class="list-group">
+        <!-- Result list items will be populated here -->
+      </ul>
+      <button id="restart-btn" class="btn btn-info w-100">Take Another Test</button>
     </div>
   </div>
 
+  <!-- Include Bootstrap JS and Popper for full functionality -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybS4cMxzjw8Jp+eBPh4p5VQp2d6ihdf5iG5pOh1Nlr+xd9jQJ" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6qWCE8Yt1QH1cO5Ij1u4gf0T0rUmPqb6A9khv2H" crossorigin="anonymous"></script>
   <script src="script.js"></script>
 </body>
 </html>
