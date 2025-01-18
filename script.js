@@ -43,27 +43,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Populate TTS voices in the dropdown
 function populateVoiceList() {
-    const voices = speechSynthesis.getVoices();
-    const voiceSelect = document.getElementById('voice-select');
+  const synth = window.speechSynthesis;
+  const voices = synth.getVoices().filter(voice => voice.lang.includes('en-'));
 
-    // Clear previous options
-    voiceSelect.innerHTML = '';
+  voiceSelect.innerHTML = voices
+    .map((voice, index) => `<option value="${index}">${voice.name} (${voice.lang})</option>`)
+    .join('');
+  selectedVoice = voices[0] || null; // Default to the first voice
 
-    // Filter voices to only English voices (those with 'en-' in their name)
-    const englishVoices = voices.filter(voice => voice.lang.includes('en-'));
+  // Update the voice when the user selects a new one
+  voiceSelect.addEventListener('change', () => {
+    const selectedIndex = parseInt(voiceSelect.value, 10);
+    selectedVoice = voices[selectedIndex];
+  });
 
-    // Populate the voice select options
-    englishVoices.forEach((voice) => {
-        const option = document.createElement('option');
-        option.textContent = voice.name;
-        option.value = voice.name;
-        voiceSelect.appendChild(option);
-    });
-
-    // Set the default voice if available
-    if (englishVoices.length > 0) {
-        voiceSelect.value = englishVoices[0].name;
-    }
+  synth.onvoiceschanged = populateVoiceList; // Refresh voices if needed
 }
 
 // Make sure the voices are loaded (sometimes the browser loads them asynchronously)
