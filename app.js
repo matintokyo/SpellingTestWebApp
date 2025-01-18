@@ -1,12 +1,14 @@
 const wordListInput = document.getElementById('word-list');
+const generateBtn = document.getElementById('generate-btn');
 const startBtn = document.getElementById('start-btn');
 const testSection = document.getElementById('test-section');
 const wordPrompt = document.getElementById('word-prompt');
 const userInput = document.getElementById('user-input');
 const nextBtn = document.getElementById('next-btn');
+const repeatBtn = document.getElementById('repeat-btn');
 const resultSection = document.getElementById('result-section');
 const scoreDisplay = document.getElementById('score');
-const mistakesList = document.getElementById('mistakes');
+const wordResults = document.getElementById('word-results');
 const restartBtn = document.getElementById('restart-btn');
 const inputSection = document.getElementById('input-section');
 
@@ -15,6 +17,17 @@ let testWords = [];
 let currentWordIndex = 0;
 let userAnswers = [];
 let score = 0;
+
+// Predefined list of words to generate random words
+const predefinedWords = [
+  'apple', 'banana', 'cherry', 'date', 'elephant', 'falcon', 'grape', 'hippopotamus',
+  'igloo', 'jaguar', 'kangaroo', 'lemon', 'mango', 'nectarine', 'orange', 'peach',
+  'quince', 'raspberry', 'strawberry', 'tomato', 'umbrella', 'violet', 'walnut',
+  'xylophone', 'yacht', 'zebra', 'ant', 'bee', 'cat', 'dog', 'eagle', 'frog',
+  'goose', 'hawk', 'iguana', 'jellyfish', 'kiwi', 'lion', 'monkey', 'newt',
+  'owl', 'penguin', 'quokka', 'rabbit', 'snake', 'tiger', 'urchin', 'vulture',
+  'whale', 'xerus', 'yak', 'zucchini'
+];
 
 // Function to shuffle and select random words
 function getRandomWords(wordArray, count) {
@@ -28,62 +41,18 @@ function speakWord(word) {
   synth.speak(utterance);
 }
 
+// Generate random words and fill the input
+generateBtn.addEventListener('click', () => {
+  const randomWords = getRandomWords(predefinedWords, 50);
+  wordListInput.value = randomWords.join(', ');
+});
+
 // Start the test
 startBtn.addEventListener('click', () => {
-  const inputWords = wordListInput.value.split(',').map(w => w.trim()).filter(Boolean);
-  if (inputWords.length < 10) {
-    alert('Please enter at least 10 words.');
-    return;
-  }
-  words = inputWords;
-  testWords = getRandomWords(words, 10);
-  inputSection.classList.add('hidden');
-  testSection.classList.remove('hidden');
-  currentWordIndex = 0;
-  userAnswers = [];
-  score = 0;
-  wordPrompt.textContent = 'Press "Next" to hear the first word!';
-});
-
-// Next word in the test
-nextBtn.addEventListener('click', () => {
-  if (currentWordIndex > 0) {
-    // Store the user's input for the last word
-    const userAnswer = userInput.value.trim();
-    userAnswers.push(userAnswer);
-    userInput.value = '';
-  }
-  if (currentWordIndex < testWords.length) {
-    const currentWord = testWords[currentWordIndex];
-    speakWord(currentWord);
-    wordPrompt.textContent = `Word ${currentWordIndex + 1} of ${testWords.length}`;
-    currentWordIndex++;
-  } else {
-    // Test is complete, show results
-    testSection.classList.add('hidden');
-    resultSection.classList.remove('hidden');
-    showResults();
-  }
-});
-
-// Show test results
-function showResults() {
-  mistakesList.innerHTML = '';
-  testWords.forEach((word, index) => {
-    if (word.toLowerCase() === userAnswers[index]?.toLowerCase()) {
-      score++;
-    } else {
-      const mistake = document.createElement('li');
-      mistake.textContent = `You wrote "${userAnswers[index] || 'empty'}", correct is "${word}"`;
-      mistakesList.appendChild(mistake);
+  if (words.length === 0) {
+    const inputWords = wordListInput.value.split(',').map(w => w.trim()).filter(Boolean);
+    if (inputWords.length < 10) {
+      alert('Please enter at least 10 words.');
+      return;
     }
-  });
-  scoreDisplay.textContent = `You scored ${score} out of ${testWords.length}.`;
-}
-
-// Restart the test
-restartBtn.addEventListener('click', () => {
-  resultSection.classList.add('hidden');
-  inputSection.classList.remove('hidden');
-  wordListInput.value = '';
-});
+    words = inputWords
