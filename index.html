@@ -8,19 +8,19 @@
 </head>
 <body>
   <!-- Input Section -->
-  <div id="input-section">
+  <div id="input-section" class="section">
     <textarea id="word-list" placeholder="Enter your list of words, separated by commas"></textarea>
     <button id="start-btn">Start Test</button>
   </div>
 
   <!-- TTS Voice Selection -->
-  <div id="tts-section">
+  <div id="tts-section" class="section">
     <label for="voice-select">Choose Voice:</label>
     <select id="voice-select"></select>
   </div>
 
   <!-- Test Section -->
-  <div id="test-section" class="hidden">
+  <div id="test-section" class="hidden section">
     <p id="word-prompt"></p>
     <input id="user-input" type="text" placeholder="Type your answer here">
     <button id="next-btn">Next</button>
@@ -28,7 +28,7 @@
   </div>
 
   <!-- Result Section -->
-  <div id="result-section" class="hidden">
+  <div id="result-section" class="hidden section">
     <h2>Results</h2>
     <p id="score"></p>
     <ul id="word-results"></ul>
