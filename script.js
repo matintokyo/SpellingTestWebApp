@@ -44,8 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Populate TTS voices in the dropdown
 function populateVoiceList() {
   const synth = window.speechSynthesis;
-  const voices = synth.getVoices();
-  voices = voices.filter(voice => voice.lang.includes('en-'));
+  const voices = synth.getVoices().filter(voice => voice.lang.includes('en-'));
 
   voiceSelect.innerHTML = voices
     .map((voice, index) => `<option value="${index}">${voice.name} (${voice.lang})</option>`)
