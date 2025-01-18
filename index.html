@@ -7,32 +7,36 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Input Section -->
-  <div id="input-section" class="section">
-    <textarea id="word-list" placeholder="Enter your list of words, separated by commas"></textarea>
-    <button id="start-btn">Start Test</button>
-  </div>
+  <div class="container">
+    <!-- Input Section -->
+    <div id="input-section" class="section">
+      <textarea id="word-list" placeholder="Enter your list of words, separated by commas"></textarea>
+      <button id="start-btn" class="primary-btn">Start Test</button>
+    </div>
 
-  <!-- TTS Voice Selection -->
-  <div id="tts-section" class="section">
-    <label for="voice-select">Choose Voice:</label>
-    <select id="voice-select"></select>
-  </div>
+    <!-- TTS Voice Selection -->
+    <div id="tts-section" class="section">
+      <label for="voice-select" class="label">Choose Voice:</label>
+      <select id="voice-select" class="dropdown"></select>
+    </div>
 
-  <!-- Test Section -->
-  <div id="test-section" class="hidden section">
-    <p id="word-prompt"></p>
-    <input id="user-input" type="text" placeholder="Type your answer here">
-    <button id="next-btn">Next</button>
-    <button id="repeat-btn" disabled>Repeat</button>
-  </div>
+    <!-- Test Section -->
+    <div id="test-section" class="hidden section">
+      <p id="word-prompt" class="prompt"></p>
+      <input id="user-input" type="text" placeholder="Type your answer here" class="text-input">
+      <div class="button-group">
+        <button id="next-btn" class="primary-btn">Next</button>
+        <button id="repeat-btn" class="secondary-btn" disabled>Repeat</button>
+      </div>
+    </div>
 
-  <!-- Result Section -->
-  <div id="result-section" class="hidden section">
-    <h2>Results</h2>
-    <p id="score"></p>
-    <ul id="word-results"></ul>
-    <button id="restart-btn">Take Another Test</button>
+    <!-- Result Section -->
+    <div id="result-section" class="hidden section">
+      <h2>Results</h2>
+      <p id="score" class="score"></p>
+      <ul id="word-results" class="results-list"></ul>
+      <button id="restart-btn" class="primary-btn">Take Another Test</button>
+    </div>
   </div>
 
   <script src="script.js"></script>
