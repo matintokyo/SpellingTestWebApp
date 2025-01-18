@@ -9,7 +9,6 @@ const resultSection = document.getElementById('result-section');
 const scoreDisplay = document.getElementById('score');
 const wordResults = document.getElementById('word-results');
 const restartBtn = document.getElementById('restart-btn');
-const inputSection = document.getElementById('input-section');
 const voiceSelect = document.getElementById('voice-select');
 
 let words = [];
