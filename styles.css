@@ -49,18 +49,17 @@ h1, h2 {
   margin-bottom: 20px;
 }
 
-#mistakes {
-  list-style: none;
-  padding: 0;
-}
-
-#mistakes li {
-  margin: 5px 0;
-  color: red;
-}
-.test-controls {
+.controls, .test-controls {
   display: flex;
   gap: 10px;
   justify-content: center;
 }
 
+#word-results {
+  list-style: none;
+  padding: 0;
+}
+
+#word-results li {
+  margin: 5px 0;
+}
