@@ -1,158 +1,159 @@
-const wordListInput = document.getElementById('word-list');
-const startBtn = document.getElementById('start-btn');
-const inputSection = document.getElementById('input-section'); // Properly defined
-const testSection = document.getElementById('test-section');
-const wordPrompt = document.getElementById('word-prompt');
-const userInput = document.getElementById('user-input');
-const nextBtn = document.getElementById('next-btn');
-const repeatBtn = document.getElementById('repeat-btn');
-const resultSection = document.getElementById('result-section');
-const scoreDisplay = document.getElementById('score');
-const wordResults = document.getElementById('word-results');
-const restartBtn = document.getElementById('restart-btn');
-const voiceSelect = document.getElementById('voice-select');
+// Predefined words categorized by weeks
+const wordsByWeek = {
+  1: [
+    "over", "new", "art", "take", "only", "car", "park", "hard", "barn", "card", "shark", "dark", "oh", "eyes", "date", "hold"
+  ],
+  2: [
+    "little", "work", "know", "place", "years", "rain", "mail", "wait", "paint", "chant", "paid", "sail", "goods", "services", "consumer", "producer"
+  ],
+  3: [
+    "live", "me", "cool", "give", "most", "saw", "law", "raw", "jar", "straw", "draw", "country", "ocean", "title", "skip", "change"
+  ],
+  4: [
+    "very", "after", "things", "our", "just", "girl", "dirt", "shirt", "third", "thirst", "birth", "yellow", "add", "got", "life", "cycle"
+  ],
+  // Add other weeks here ...
+  // Week 5 to Week 36...
+};
 
-let words = [];
-let testWords = [];
+// State variables
+let selectedWeeks = [];
+let testMode = 'normal';
+let wordsToTest = [];
 let currentWordIndex = 0;
-let userAnswers = [];
-let score = 0;
-let selectedVoice = null;
+let mistakes = [];
 
-// Predefined list of 100 words
-const predefinedWords = [
-  'apple', 'banana', 'cherry', 'date', 'elephant', 'falcon', 'grape', 'hippopotamus',
-  'igloo', 'jaguar', 'kangaroo', 'lemon', 'mango', 'nectarine', 'orange', 'peach',
-  'quince', 'raspberry', 'strawberry', 'tomato', 'umbrella', 'violet', 'walnut',
-  'xylophone', 'yacht', 'zebra', 'ant', 'bee', 'cat', 'dog', 'eagle', 'frog',
-  'goose', 'hawk', 'iguana', 'jellyfish', 'kiwi', 'lion', 'monkey', 'newt',
-  'owl', 'penguin', 'quokka', 'rabbit', 'snake', 'tiger', 'urchin', 'vulture',
-  'whale', 'xerus', 'yak', 'zucchini', 'cloud', 'rainbow', 'forest', 'mountain',
-  'river', 'ocean', 'desert', 'island', 'prairie', 'plateau', 'valley', 'meadow',
-  'cliff', 'canyon', 'lake', 'waterfall', 'stream', 'geyser', 'volcano', 'glacier',
-  'hill', 'dune', 'reef', 'lagoon', 'beach', 'shore', 'bay', 'cave', 'delta',
-  'plain', 'peak', 'peninsula', 'archipelago', 'marsh', 'swamp', 'bog', 'savanna',
-  'jungle', 'rainforest', 'tundra', 'steppe', 'fjord', 'estuary', 'grove', 'orchard'
-];
+// Dynamically populate week selector and handle mode changes
+window.onload = () => {
+  const weekSelector = document.getElementById('week-selector');
+  for (let i = 1; i <= 36; i++) {
+    const weekOption = document.createElement('div');
+    weekOption.className = 'form-check';
+    weekOption.innerHTML = `
+      <input class="form-check-input" type="checkbox" value="${i}" id="week-${i}">
+      <label class="form-check-label" for="week-${i}">Week ${i}</label>
+    `;
+    weekSelector.appendChild(weekOption);
+  }
 
-// Prepopulate the word list and load voices
-document.addEventListener('DOMContentLoaded', () => {
-  wordListInput.value = predefinedWords.join(', ');
-  populateVoiceList();
-});
+  // Button to start test
+  document.getElementById('start-btn').addEventListener('click', startTest);
+  document.getElementById('normal-mode').addEventListener('change', () => { testMode = 'normal'; });
+  document.getElementById('hard-mode').addEventListener('change', () => { testMode = 'hard'; });
+};
 
-// Populate TTS voices in the dropdown
-function populateVoiceList() {
-  const synth = window.speechSynthesis;
-  const voices = synth.getVoices();
-  voiceSelect.innerHTML = voices
-    .map((voice, index) => `<option value="${index}">${voice.name} (${voice.lang})</option>`)
-    .join('');
-  selectedVoice = voices[0] || null; // Default to the first voice
+// Collect selected weeks
+function getSelectedWeeks() {
+  selectedWeeks = [];
+  for (let i = 1; i <= 36; i++) {
+    const checkbox = document.getElementById(`week-${i}`);
+    if (checkbox.checked) {
+      selectedWeeks.push(i);
+    }
+  }
+}
 
-  // Update the voice when the user selects a new one
-  voiceSelect.addEventListener('change', () => {
-    const selectedIndex = parseInt(voiceSelect.value, 10);
-    selectedVoice = voices[selectedIndex];
+// Generate test words based on selected weeks and mode
+function generateTestWords() {
+  getSelectedWeeks();
+  const words = [];
+  selectedWeeks.forEach(week => {
+    const weekWords = wordsByWeek[week];
+    const range = testMode === 'normal' ? 10 : 16;
+    const selectedWords = weekWords.slice(0, range);
+    words.push(...selectedWords);
   });
+  
+  // Randomly shuffle and select 10 or 16 words based on mode
+  wordsToTest = shuffle(words).slice(0, testMode === 'normal' ? 10 : 16);
+}
 
-  synth.onvoiceschanged = populateVoiceList; // Refresh voices if needed
+// Shuffle array (Fisher-Yates shuffle)
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
 
 // Start the test
-startBtn.addEventListener('click', () => {
-  const inputWords = wordListInput.value.split(',').map(w => w.trim()).filter(Boolean);
-  if (inputWords.length < 10) {
-    alert('Please enter at least 10 words.');
+function startTest() {
+  getSelectedWeeks();
+  if (selectedWeeks.length === 0) {
+    alert('Please select at least one week.');
     return;
   }
-  words = inputWords;
-  startTest();
-});
-
-function startTest() {
-  testWords = getRandomWords(words, 10); // Get 10 random words for the test
-  inputSection.classList.add('hidden');
-  resultSection.classList.add('hidden');
-  testSection.classList.remove('hidden');
+  
+  generateTestWords();
+  showTestSection();
   currentWordIndex = 0;
-  userAnswers = [];
-  score = 0;
-  repeatBtn.disabled = true;
-  userInput.value = '';
-  wordPrompt.textContent = 'Press "Next" to hear the first word!';
-  userInput.focus(); // Focus the input box initially
+  showNextWord();
 }
 
-// Next word in the test
-nextBtn.addEventListener('click', () => {
-  if (currentWordIndex > 0) {
-    const userAnswer = userInput.value.trim();
-    userAnswers.push(userAnswer);
-    userInput.value = '';
-  }
+// Show the test section and hide the home section
+function showTestSection() {
+  document.getElementById('home-section').classList.add('hidden');
+  document.getElementById('test-section').classList.remove('hidden');
+}
 
-  if (currentWordIndex < testWords.length) {
-    const currentWord = testWords[currentWordIndex];
-    speakWord(currentWord);
-    wordPrompt.textContent = `Word ${currentWordIndex + 1} of ${testWords.length}`;
-    repeatBtn.disabled = false;
+// Show the next word in the test
+function showNextWord() {
+  if (currentWordIndex < wordsToTest.length) {
+    const word = wordsToTest[currentWordIndex];
+    document.getElementById('word-prompt').innerText = word;
+    document.getElementById('user-input').value = '';
+    document.getElementById('user-input').focus();
     currentWordIndex++;
-    userInput.focus(); // Focus the input box automatically
   } else {
-    endTest();
+    showResults();
   }
-});
-
-// Repeat the current word
-repeatBtn.addEventListener('click', () => {
-  const currentWord = testWords[currentWordIndex - 1];
-  speakWord(currentWord);
-});
-
-// End the test and show results
-function endTest() {
-  const userAnswer = userInput.value.trim();
-  userAnswers.push(userAnswer);
-  testSection.classList.add('hidden');
-  resultSection.classList.remove('hidden');
-  displayResults();
 }
 
-// Display results
-function displayResults() {
-  score = 0;
+// Show the results at the end of the test
+function showResults() {
+  document.getElementById('test-section').classList.add('hidden');
+  document.getElementById('result-section').classList.remove('hidden');
+  
+  let score = 0;
+  const wordResults = document.getElementById('word-results');
   wordResults.innerHTML = '';
-  testWords.forEach((word, index) => {
-    const userAnswer = userAnswers[index] || 'empty';
-    const isCorrect = word.toLowerCase() === userAnswer.toLowerCase();
-    if (isCorrect) score++;
-
+  
+  wordsToTest.forEach((word, index) => {
     const listItem = document.createElement('li');
-    listItem.textContent = `${index + 1}. ${word} - ${isCorrect ? 'Correct' : `Wrong (You wrote: "${userAnswer}")`}`;
-    listItem.style.color = isCorrect ? 'green' : 'red';
+    listItem.classList.add('list-group-item');
+    
+    const userAnswer = document.getElementById('user-input').value.trim();
+    const isCorrect = userAnswer.toLowerCase() === word.toLowerCase();
+    if (isCorrect) {
+      score++;
+    } else {
+      mistakes.push(word);
+    }
+
+    listItem.innerHTML = `${word} - ${isCorrect ? 'Correct' : 'Wrong'}`;
     wordResults.appendChild(listItem);
   });
-  scoreDisplay.textContent = `You scored ${score} out of ${testWords.length}.`;
+  
+  document.getElementById('score').innerText = `Score: ${score}/${wordsToTest.length}`;
+  document.getElementById('test-mistakes-btn').classList.toggle('hidden', mistakes.length === 0);
 }
 
-// Restart the test
-restartBtn.addEventListener('click', () => {
+// Handle retake or mistakes test
+document.getElementById('retake-btn').addEventListener('click', () => {
+  mistakes = [];
   startTest();
 });
 
-// Function to get random words
-function getRandomWords(wordArray, count) {
-  return wordArray
-    .slice()
-    .sort(() => Math.random() - 0.5)
-    .slice(0, count);
-}
+document.getElementById('test-mistakes-btn').addEventListener('click', () => {
+  wordsToTest = mistakes;
+  showTestSection();
+  currentWordIndex = 0;
+  showNextWord();
+});
 
-// Function to read a word using TTS
-function speakWord(word) {
-  const synth = window.speechSynthesis;
-  const utterance = new SpeechSynthesisUtterance(word);
-  if (selectedVoice) utterance.voice = selectedVoice;
-  synth.speak(utterance);
-}
+// Navigate back to home
+document.getElementById('home-btn').addEventListener('click', () => {
+  document.getElementById('result-section').classList.add('hidden');
+  document.getElementById('home-section').classList.remove('hidden');
+});
