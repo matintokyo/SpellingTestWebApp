@@ -45,7 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
 function populateVoiceList() {
   const synth = window.speechSynthesis;
   const voices = synth.getVoices();
-  voiceSelect.innerHTML = voices
+  const englishVoices = voices.filter(voice => voice.lang.includes('en-'));
+
+  voiceSelect.innerHTML = englishVoices
     .map((voice, index) => `<option value="${index}">${voice.name} (${voice.lang})</option>`)
     .join('');
   selectedVoice = voices[0] || null; // Default to the first voice
@@ -57,6 +59,13 @@ function populateVoiceList() {
   });
 
   synth.onvoiceschanged = populateVoiceList; // Refresh voices if needed
+}
+
+// Make sure the voices are loaded (sometimes the browser loads them asynchronously)
+if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = populateVoiceList;
+} else {
+    populateVoiceList();
 }
 
 // Start the test
