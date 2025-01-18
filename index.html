@@ -4,29 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spelling Practice</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Include Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEJ5bGg5v6S2g9MzVrD6Xjc9MkY6hgA1Xk64zUAX0jYNinE4XbAwP4p7J9fYp" crossorigin="anonymous">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container py-5">
-    <!-- Home Section -->
-    <div id="home-section" class="section mb-4">
-      <h2>Select Week(s) for Test</h2>
-      <div id="week-selector" class="form-check">
-        <!-- Week checkboxes will be added dynamically -->
+    <!-- Input Section -->
+    <div id="input-section" class="section mb-4">
+      <div class="mb-3">
+        <textarea id="word-list" class="form-control" placeholder="Enter your list of words, separated by commas"></textarea>
       </div>
+      <button id="start-btn" class="btn btn-success w-100">Start Test</button>
+    </div>
 
-      <h3>Select Mode</h3>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="mode" id="normal-mode" value="normal" checked>
-        <label class="form-check-label" for="normal-mode">Normal</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="mode" id="hard-mode" value="hard">
-        <label class="form-check-label" for="hard-mode">Hard</label>
-      </div>
-
-      <button id="start-btn" class="btn btn-success w-100 mt-4">Start Test</button>
+    <!-- TTS Voice Selection -->
+    <div id="tts-section" class="section mb-4">
+      <label for="voice-select" class="form-label">Choose Voice:</label>
+      <select id="voice-select" class="form-select">
+        <!-- Dynamic options will be populated here -->
+      </select>
     </div>
 
     <!-- Test Section -->
@@ -43,16 +40,16 @@
     <div id="result-section" class="hidden section mb-4">
       <h2>Results</h2>
       <p id="score" class="h4 mb-4"></p>
-      <ul id="word-results" class="list-group"></ul>
-      <div class="d-flex justify-content-between mt-4">
-        <button id="retake-btn" class="btn btn-warning w-48">Retake Test</button>
-        <button id="test-mistakes-btn" class="btn btn-info w-48 hidden">Test Mistakes</button>
-        <button id="home-btn" class="btn btn-light w-48">Home</button>
-      </div>
+      <ul id="word-results" class="list-group">
+        <!-- Result list items will be populated here -->
+      </ul>
+      <button id="restart-btn" class="btn btn-info w-100">Take Another Test</button>
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bs5-toast/1.0.0/toast.min.js"></script>
+  <!-- Include Bootstrap JS and Popper for full functionality -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybS4cMxzjw8Jp+eBPh4p5VQp2d6ihdf5iG5pOh1Nlr+xd9jQJ" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6qWCE8Yt1QH1cO5Ij1u4gf0T0rUmPqb6A9khv2H" crossorigin="anonymous"></script>
   <script src="script.js"></script>
 </body>
 </html>
